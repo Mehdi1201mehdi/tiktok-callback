@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TikTok - Code d'autorisation</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0f1115;
+    color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+  .card {
+    max-width: 560px;
+    width: 100%;
+    background: #171a21;
+    border: 1px solid #2a2e37;
+    border-radius: 12px;
+    padding: 32px;
+  }
+  h1 { font-size: 20px; margin-top: 0; }
+  .label { font-size: 13px; color: #9aa0ab; margin-top: 20px; margin-bottom: 6px; }
+  .value {
+    background: #0f1115;
+    border: 1px solid #2a2e37;
+    border-radius: 8px;
+    padding: 12px;
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 13px;
+    position: relative;
+  }
+  button {
+    margin-top: 10px;
+    background: #5865f2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  button:hover { background: #4752c4; }
+  .empty { color: #ff6b6b; }
+  .ok { color: #4caf50; font-size: 13px; margin-top: 8px; display: none; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Code d'autorisation TikTok</h1>
+    <div id="content">
+      <div class="label">code</div>
+      <div class="value" id="code">-</div>
+      <button onclick="copyValue('code')">Copier le code</button>
+      <div class="ok" id="ok-code">Copie !</div>
+
+      <div class="label">state</div>
+      <div class="value" id="state">-</div>
+    </div>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const state = params.get('state');
+    const error = params.get('error');
+    const errorDescription = params.get('error_description');
+
+    if (error) {
+      document.getElementById('content').innerHTML =
+        '<div class="label empty">Erreur TikTok</div>' +
+        '<div class="value empty">' + (errorDescription || error) + '</div>';
+    } else {
+      document.getElementById('code').textContent = code || '(aucun code recu)';
+      document.getElementById('state').textContent = state || '-';
+    }
+
+    function copyValue(id) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        document.getElementById('ok-' + id).style.display = 'block';
+      });
+    }
+  </script>
+</body>
+</html>
